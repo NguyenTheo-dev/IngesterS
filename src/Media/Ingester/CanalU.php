@@ -97,6 +97,9 @@ class CanalU implements IngesterInterface
             // The URL parameter was not found in the HTML content
             $errorStore->addError('o:source', 'Permalink could not be extracted from the URL specified');
         }
+
+        $canonical;
+        $thumbLink;
         
         if (isset($newUrl)){
 
@@ -107,8 +110,8 @@ class CanalU implements IngesterInterface
             $dom->loadHTML($response, LIBXML_NOERROR);
             $links = $dom->getElementsByTagName('link');
             // normally, we only care about the first two links
-            $canonical =  $links->item(0)->getAttribute('href');
-            $thumbLink =  $links->item(1)->getAttribute('href');
+            $canonical = $links->item(0)->getAttribute('href');
+            $thumbLink = $links->item(1)->getAttribute('href');
         }
 
         curl_close($cURLConnection);
@@ -122,7 +125,7 @@ class CanalU implements IngesterInterface
             }
         }
 
-        if(isset($canonical) or 1==1){
+        if(isset($canonical)){
 
             $mediaData['canonical'] = $canonical;
 
@@ -133,7 +136,7 @@ class CanalU implements IngesterInterface
 
         }
 
-        $mediaData = ['id' => $youtubeId];
+        $mediaData['id'] = $youtubeId;
         
         $start = trim($request->getValue('start'));
         if (is_numeric($start)) {
