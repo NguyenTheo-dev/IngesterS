@@ -5,6 +5,7 @@ use Omeka\Api\Request;
 use Omeka\Entity\Media;
 use Omeka\File\Downloader;
 use Omeka\Stdlib\ErrorStore;
+use Omeka\Media\Ingester\IngesterInterface;
 use Laminas\Form\Element\Text;
 use Laminas\Form\Element\Url as UrlElement;
 use Laminas\Uri\Http as HttpUri;
