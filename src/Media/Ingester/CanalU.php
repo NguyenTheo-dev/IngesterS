@@ -71,16 +71,12 @@ class CanalU implements IngesterInterface
         */
 
         $mediaData = ['id' => $youtubeId];
-        /*
+        
         $start = trim($request->getValue('start'));
         if (is_numeric($start)) {
             $mediaData['start'] = $start;
         }
-        $end = trim($request->getValue('end'));
-        if (is_numeric($end)) {
-            $mediaData['end'] = $end;
-        }
-        */
+        
         $media->setData($mediaData);
     }
 
@@ -100,13 +96,7 @@ class CanalU implements IngesterInterface
             'label' => 'Start', // @translate
             'info' => 'Begin playing the video at the given number of seconds from the start of the video.', // @translate
         ]);
-        $endInput = new Text('o:media[__index__][end]');
-        $endInput->setOptions([
-            'label' => 'End', // @translate
-            'info' => 'End playing the video at the given number of seconds from the start of the video.', // @translate
-        ]);
         return $view->formRow($urlInput)
-            . $view->formRow($startInput)
-            . $view->formRow($endInput);
+            . $view->formRow($startInput);
     }
 }
