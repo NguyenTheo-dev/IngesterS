@@ -8,7 +8,7 @@ use Laminas\View\Renderer\PhpRenderer;
 
 class CanalU implements RendererInterface
 {
-    const WIDTH = 420;
+    const WIDTH = 560;
     const HEIGHT = 315;
     const ALLOWFULLSCREEN = true;
 

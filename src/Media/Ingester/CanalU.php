@@ -64,6 +64,7 @@ class CanalU implements IngesterInterface
                 //extracts the id
                 $youtubeId = $parts[count($parts) - 1];
                 //if the id isn't empty, and that removing every numbers leaves nothing then we have a valid id
+                // maaaaaybe is_numeric would work as well
                 if( $youtubeId !== '' && trim($youtubeId, ' 1234567890') === '' ){
                     break;
                 }
@@ -121,7 +122,7 @@ class CanalU implements IngesterInterface
             }
         }
 
-        if(isset($canonical)){
+        if(isset($canonical) or 1==1){
 
             $mediaData['canonical'] = $canonical;
 
