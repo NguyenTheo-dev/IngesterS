@@ -123,12 +123,12 @@ class CanalU implements IngesterInterface
 
         if(isset($canonical)){
 
-            $mediaData['canonical'] = $canonical;
+            $mediaData = ['canonical' => $canonical];
 
             $path = parse_url($canonical, PHP_URL_PATH);
             // Split the path into its component parts
             $parts = explode('/', trim($path, '/'));
-            $mediaData['channel'] = $parts[1];
+            $mediaData = ['channel' => $parts[1]];
 
             $media->setData($mediaData);
         }
