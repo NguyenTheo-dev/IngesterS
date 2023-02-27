@@ -67,11 +67,11 @@ class CanalU implements IngesterInterface
                     break;
                 }
                 else{
-                    $errorStore->addError('o:source', 'Invalid Canal-U URL specified, please specify an URL ending with an ID');
+                    $errorStore->addError('o:source', 'Invalid Canal-U URL specified, id is not only numbers');
                     return;
                 }
             default:
-                $errorStore->addError('o:source', 'Invalid Canal-U URL specified');
+                $errorStore->addError('o:source', 'Invalid Canal-U URL specified, wrong host');
                 return;
         }
 
