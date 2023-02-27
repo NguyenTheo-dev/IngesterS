@@ -10,7 +10,7 @@ return [
     ],
     'media_renderers' => [
         'invokables' => [
-            'canalU' => Media\Renderer\CanalU::class,
+            'canalu' => Media\Renderer\CanalU::class,
         ],
     ],
 ];

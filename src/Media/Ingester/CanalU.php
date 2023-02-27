@@ -31,7 +31,7 @@ class CanalU implements IngesterInterface
 
     public function getRenderer()
     {
-        return 'CanalU';
+        return 'canalu';
     }
 
     public function ingest(Media $media, Request $request, ErrorStore $errorStore)
@@ -51,9 +51,9 @@ class CanalU implements IngesterInterface
         // You can find it from the Notice tab on each video
         switch ($uri->getHost()) {
             // error handling checking for invaid input
-            case 1==1:
+            case "www.canal-u.tv":
                 //extracts the id
-                $youtubeId = substr($url, strrpos($url, '/') + 1);
+                $youtubeId = substr($uri, strrpos($uri, '/') + 1);
                 break;
             default:
                 $errorStore->addError('o:source', 'Invalid YouTube URL specified, not a YouTube URL');
