@@ -51,7 +51,7 @@ class CanalU implements IngesterInterface
         // You can find it from the Notice tab on each video
         switch ($uri->getHost()) {
             // error handling checking for invaid input
-            case 1 == 1:
+            case 1==1:
                 //extracts the id
                 $youtubeId = substr($url, strrpos($url, '/') + 1);
                 break;
