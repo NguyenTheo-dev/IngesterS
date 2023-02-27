@@ -55,7 +55,7 @@ class CanalU implements IngesterInterface
             case "www.canal-u.tv":
 
                 // Extract the path portion of the URL (i.e. everything after the hostname)
-                $path = parse_url($url, PHP_URL_PATH);
+                $path = parse_url($uri, PHP_URL_PATH);
 
                 // Split the path into its component parts
                 $parts = explode('/', trim($path, '/'));
