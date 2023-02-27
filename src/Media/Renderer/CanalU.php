@@ -2,6 +2,7 @@
 namespace IngesterS\Media\Renderer;
 
 use Omeka\Api\Representation\MediaRepresentation;
+use Omeka\Media\Renderer\RendererInterface;
 use Laminas\Uri\Http as HttpUri;
 use Laminas\View\Renderer\PhpRenderer;
 
@@ -11,9 +12,8 @@ class CanalU implements RendererInterface
     const HEIGHT = 315;
     const ALLOWFULLSCREEN = true;
 
-    public function render(PhpRenderer $view, MediaRepresentation $media,
-        array $options = []
-    ) {
+    public function render(PhpRenderer $view, MediaRepresentation $media, array $options = []) {
+        
         if (!isset($options['width'])) {
             $options['width'] = self::WIDTH;
         }
