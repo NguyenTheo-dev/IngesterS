@@ -11,6 +11,7 @@ use Laminas\Form\Element\Url as UrlElement;
 use Laminas\Uri\Http as HttpUri;
 use Laminas\Http\Client;
 use Laminas\View\Renderer\PhpRenderer;
+use DOMDocument;
 
 class CanalU implements IngesterInterface
 {
