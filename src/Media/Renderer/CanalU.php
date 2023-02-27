@@ -13,7 +13,7 @@ class CanalU implements RendererInterface
     const ALLOWFULLSCREEN = true;
 
     public function render(PhpRenderer $view, MediaRepresentation $media, array $options = []) {
-        
+
         if (!isset($options['width'])) {
             $options['width'] = self::WIDTH;
         }
@@ -29,18 +29,14 @@ class CanalU implements RendererInterface
         $url = new HttpUri(sprintf('https://www.canal-u.tv/embed/%s', $data['id']));
         $query = [];
         if (isset($data['start'])) {
-            $query['start'] = $data['start'];
-        }
-        if (isset($data['end'])) {
-            $query['end'] = $data['end'];
+            $query['t'] = $data['start'];
         }
         $url->setQuery($query);
         $embed = sprintf(
-            '<iframe width="%s" height="%s" src="%s" frameborder="0"%s></iframe>',
+            '<iframe width="%s" height="%s" src="%s" allowfullscreen></iframe>',
             $view->escapeHtml($options['width']),
             $view->escapeHtml($options['height']),
-            $view->escapeHtml($url),
-            $options['allowfullscreen'] ? ' allowfullscreen' : ''
+            $view->escapeHtml($url)
         );
         return $embed;
     }
