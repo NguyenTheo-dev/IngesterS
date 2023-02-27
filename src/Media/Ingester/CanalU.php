@@ -86,7 +86,7 @@ class CanalU implements IngesterInterface
         curl_setopt($cURLConnection, CURLOPT_RETURNTRANSFER, true);
         $response = curl_exec($cURLConnection);
         $dom = new DOMDocument();
-        $dom->loadHTML($response);
+        $dom->loadHTML($response, LIBXML_NOERROR);
         $redirect = $dom->getElementsByTagName('a');
         $newUrl = $redirect->item(0)->nodeValue;
 
@@ -103,7 +103,7 @@ class CanalU implements IngesterInterface
             curl_setopt($cURLConnection, CURLOPT_RETURNTRANSFER, true);
             $response = curl_exec($cURLConnection);
             $dom = new DOMDocument();
-            $dom->loadHTML($response);
+            $dom->loadHTML($response, LIBXML_NOERROR);
             $links = $dom->getElementsByTagName('link');
             // normally, we only care about the first two links
             $canonical =  $links->item(0)->getAttribute('href');
