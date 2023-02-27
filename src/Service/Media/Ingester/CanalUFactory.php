@@ -5,7 +5,7 @@ use IngesterS\Media\Ingester\CanalU;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Interop\Container\ContainerInterface;
 
-class LocalFactory implements FactoryInterface
+class CanalUFactory implements FactoryInterface
 {
 
     /**
