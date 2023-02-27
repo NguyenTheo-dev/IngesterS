@@ -49,26 +49,88 @@ class CanalU implements IngesterInterface
         // Example CanalU Url: https://www.canal-u.tv/137384 <- most practical
         // Example https://www.canal-u.tv/chaines/ehess/captations/memorial-ou-la-memoire-en-peril-lorsque-le-temps-present-se-heurte-au <- ok its pretty, but extracting an Id from this is hard
         // You can find it from the Notice tab on each video
+        //only checks if we provided a url containing an id, and from the correct host
         switch ($uri->getHost()) {
             // error handling checking for invaid input
             case "www.canal-u.tv":
+
+                // Extract the path portion of the URL (i.e. everything after the hostname)
+                $path = parse_url($url, PHP_URL_PATH);
+
+                // Split the path into its component parts
+                $parts = explode('/', trim($path, '/'));
+
                 //extracts the id
-                $youtubeId = substr($uri, strrpos($uri, '/') + 1);
-                break;
+                $youtubeId = $parts[count($parts) - 1];
+                //if the id isn't empty, and that removing every numbers leaves nothing then we have a valid id
+                if( $youtubeId !== '' && trim($youtubeId, ' 1234567890') === '' ){
+                    break;
+                }
+                else{
+                    $errorStore->addError('o:source', 'Invalid Canal-U URL specified, please specify an URL ending with an ID');
+                    return;
+                }
             default:
-                $errorStore->addError('o:source', 'Invalid YouTube URL specified, not a YouTube URL');
+                $errorStore->addError('o:source', 'Invalid Canal-U URL specified');
                 return;
         }
 
-        /*
         // Builds the thumbnail
-        // TODO 
-        $url = sprintf('http://img.youtube.com/vi/%s/0.jpg', $youtubeId);
-        $tempFile = $this->downloader->download($url);
-        if ($tempFile) {
-            $tempFile->mediaIngestFile($media, $request, $errorStore, false);
+        // Also get some useful data for the embedding
+        $cURLConnection = curl_init();
+        
+        //we get the non-perma link, because it's where we can find the thumbnail as well as the embed info
+        // TODO (maybe) : Laminas-ize the web queries
+        curl_setopt($cURLConnection, CURLOPT_URL, $uri);
+        curl_setopt($cURLConnection, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($cURLConnection);
+        $dom = new DOMDocument();
+        $dom->loadHTML($response);
+        $redirect = $dom->getElementsByTagName('a');
+        $newUrl = $redirect->item(0)->nodeValue;
+
+        //we get the permalink url from the previous result
+        if (!isset($newUrl)) {
+
+            // The URL parameter was not found in the HTML content
+            $errorStore->addError('o:source', 'Permalink could not be extracted from the URL specified');
         }
-        */
+        
+        if (isset($newUrl)){
+
+            curl_setopt($cURLConnection, CURLOPT_URL, $newUrl);
+            curl_setopt($cURLConnection, CURLOPT_RETURNTRANSFER, true);
+            $response = curl_exec($cURLConnection);
+            $dom = new DOMDocument();
+            $dom->loadHTML($response);
+            $links = $dom->getElementsByTagName('link');
+            // normally, we only care about the first two links
+            $canonical =  $links->item(0)->getAttribute('href');
+            $thumbLink =  $links->item(1)->getAttribute('href');
+        }
+
+        curl_close($cURLConnection);
+
+        if(isset($thumbLink)){
+
+            $url = $thumbLink;
+            $tempFile = $this->downloader->download($url);
+            if ($tempFile) {
+                $tempFile->mediaIngestFile($media, $request, $errorStore, false);
+            }
+        }
+
+        if(isset($canonical)){
+
+            $mediaData['canonical'] = $canonical;
+
+            $path = parse_url($canonical, PHP_URL_PATH);
+            // Split the path into its component parts
+            $parts = explode('/', trim($path, '/'));
+            $mediaData['channel'] = $parts[1];
+
+            $media->setData($mediaData);
+        }
 
         $mediaData = ['id' => $youtubeId];
         
@@ -85,7 +147,7 @@ class CanalU implements IngesterInterface
         $urlInput = new UrlElement('o:media[__index__][o:source]');
         $urlInput->setOptions([
             'label' => 'Video URL', // @translate
-            'info' => 'URL for the video to embed.', // @translate
+            'info' => 'URL for the video to embed. Please use the permalink, which ends in a numeric Id.', // @translate
         ]);
         $urlInput->setAttributes([
             'id' => 'media-youtube-source-__index__',

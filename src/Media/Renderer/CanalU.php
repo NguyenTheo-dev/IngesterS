@@ -26,7 +26,7 @@ class CanalU implements RendererInterface
 
         // Compose the YouTube embed URL and build the markup.
         $data = $media->mediaData();
-        $url = new HttpUri(sprintf('https://www.canal-u.tv/embed/%s', $data['id']));
+        $url = new HttpUri(sprintf('https://www.canal-u.tv/chaines/%s/embed/%s', $data['channel'], $data['id']));
         $query = [];
         if (isset($data['start'])) {
             $query['t'] = $data['start'];
